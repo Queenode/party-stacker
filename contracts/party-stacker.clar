@@ -4,12 +4,17 @@
 ;; Define Constants
 (define-constant contract-owner tx-sender)
 (define-constant err-owner-only (err u100))
+(define-constant err-not-authorized (err u101))
 (define-constant err-event-not-found (err u404))
 (define-constant err-tier-not-found (err u405))
 (define-constant err-ticket-sold-out (err u403))
 (define-constant err-insufficient-funds (err u402))
 (define-constant err-already-checked-in (err u409))
 (define-constant err-invalid-tier (err u410))
+(define-constant err-not-token-owner (err u411))
+(define-constant err-soulbound-ticket (err u412))
+(define-constant err-ticket-not-listed (err u413))
+(define-constant err-already-listed (err u414))
 
 ;; Define NFT: Ticket
 (define-non-fungible-token ticket uint)
@@ -27,7 +32,8 @@
         active: bool,
         metadata-uri: (string-ascii 256),
         organizer: principal,
-        title: (string-ascii 64)
+        title: (string-ascii 64),
+        soulbound: bool
     }
 )
 
@@ -52,6 +58,15 @@
         checked-in: bool
     }
 )
+ 
+;; Marketplace Listings
+(define-map ticket-listings
+    { ticket-id: uint }
+    {
+        price: uint,
+        seller: principal
+    }
+)
 
 ;; --- Public Functions ---
 
@@ -63,6 +78,7 @@
     (price-g uint) (cap-g uint)
     (price-v uint) (cap-v uint)
     (price-b uint) (cap-b uint)
+    (soulbound bool)
 )
     (let
         (
@@ -75,7 +91,8 @@
                 active: true,
                 metadata-uri: metadata-uri,
                 organizer: tx-sender,
-                title: title
+                title: title,
+                soulbound: soulbound
             }
         )
 
@@ -163,10 +180,125 @@
     )
 )
 
-;; --- Read-Only Functions ---
+;; 4. SIP-009: Transfer
+(define-public (transfer (id uint) (sender principal) (recipient principal))
+    (let
+        (
+            (ticket-data (unwrap! (map-get? ticket-details { ticket-id: id }) err-event-not-found))
+            (event-id (get event-id ticket-data))
+            (event (unwrap! (map-get? events { event-id: event-id }) err-event-not-found))
+        )
+        (asserts! (is-eq tx-sender sender) err-not-token-owner)
+        (asserts! (not (get soulbound event)) err-soulbound-ticket)
+        (try! (nft-transfer? ticket id sender recipient))
+        (map-set ticket-details
+            { ticket-id: id }
+            (merge ticket-data { owner: recipient })
+        )
+        (ok true)
+    )
+)
+
+;; 5. Burn Ticket
+(define-public (burn (id uint))
+    (let
+        (
+            (ticket-data (unwrap! (map-get? ticket-details { ticket-id: id }) err-event-not-found))
+            (owner (get owner ticket-data))
+        )
+        (asserts! (is-eq tx-sender owner) err-not-token-owner)
+        (try! (nft-burn? ticket id owner))
+        (map-delete ticket-details { ticket-id: id })
+        (ok true)
+    )
+ )
+ 
+ ;; 6. Marketplace: List Ticket
+ (define-public (list-ticket (id uint) (price uint))
+    (let
+        (
+            (ticket-data (unwrap! (map-get? ticket-details { ticket-id: id }) err-event-not-found))
+        )
+        (asserts! (is-eq tx-sender (get owner ticket-data)) err-not-token-owner)
+        (asserts! (is-none (map-get? ticket-listings { ticket-id: id })) err-already-listed)
+        
+        (map-insert ticket-listings 
+            { ticket-id: id } 
+            { price: price, seller: tx-sender }
+        )
+        (ok true)
+    )
+ )
+ 
+ ;; 7. Marketplace: Unlist Ticket
+ (define-public (unlist-ticket (id uint))
+    (let
+        (
+            (listing (unwrap! (map-get? ticket-listings { ticket-id: id }) err-ticket-not-listed))
+        )
+        (asserts! (is-eq tx-sender (get seller listing)) err-not-token-owner)
+        (map-delete ticket-listings { ticket-id: id })
+        (ok true)
+    )
+ )
+ 
+ ;; 8. Marketplace: Buy Ticket
+ (define-public (buy-listed-ticket (id uint))
+    (let
+        (
+            (listing (unwrap! (map-get? ticket-listings { ticket-id: id }) err-ticket-not-listed))
+            (ticket-data (unwrap! (map-get? ticket-details { ticket-id: id }) err-event-not-found))
+            (event-id (get event-id ticket-data))
+            (event (unwrap! (map-get? events { event-id: event-id }) err-event-not-found))
+            (organizer (get organizer event))
+            (price (get price listing))
+            (seller (get seller listing))
+            (royalty (/ (* price u10) u100)) ;; 10% Royalty
+            (seller-proceeds (- price royalty))
+        )
+        ;; Pay Seller
+        (try! (stx-transfer? seller-proceeds tx-sender seller))
+        ;; Pay Organizer Royalty
+        (if (> royalty u0)
+            (try! (stx-transfer? royalty tx-sender organizer))
+            true
+        )
+        ;; Transfer NFT
+        (try! (nft-transfer? ticket id seller tx-sender))
+        ;; Update Ticket Details
+        (map-set ticket-details
+            { ticket-id: id }
+            (merge ticket-data { owner: tx-sender })
+        )
+        ;; Remove Listing
+        (map-delete ticket-listings { ticket-id: id })
+        (ok true)
+    )
+ )
+ 
+ ;; --- Read-Only Functions ---
+
+;; SIP-009: Get last token ID
+(define-read-only (get-last-token-id)
+    (ok (var-get last-ticket-id))
+)
+
+;; SIP-009: Get token URI
+(define-read-only (get-token-uri (id uint))
+    (ok none)
+)
+
+;; SIP-009: Get owner
+(define-read-only (get-owner (id uint))
+    (ok (nft-get-owner? ticket id))
+)
 
 (define-read-only (get-event (event-id uint))
     (map-get? events { event-id: event-id })
+)
+
+(define-read-only (get-ticket-listing (id uint))
+    (map-get? ticket-listings { ticket-id: id })
 )
 
 (define-read-only (get-tier-stats (event-id uint) (tier uint))
