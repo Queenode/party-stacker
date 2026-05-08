@@ -5,9 +5,10 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { QRCodeDisplay } from '@/components/QRCodeDisplay';
-import { ArrowLeft, Ticket } from 'lucide-react';
+import { ArrowLeft, Ticket, Store } from 'lucide-react';
 import { useWalletStore } from '@/lib/store';
 import type { Ticket as TicketType, Event } from '@/lib/types';
+import { Input } from '@/components/ui/input';
 
 export default function MyTicketsPage() {
   const [tickets, setTickets] = useState<TicketType[]>([]);
@@ -86,6 +87,61 @@ export default function MyTicketsPage() {
             event={event}
             qrCodeUrl={selectedTicket.qrCodeData}
           />
+          
+          {/* Marketplace Listing Section */}
+          {!event.soulbound && !selectedTicket.isListed && !selectedTicket.checkedIn && (
+            <Card className="mt-8 p-6 bg-slate-900 border-white/10 space-y-4">
+                <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                    <Store className="w-5 h-5 text-purple-500" />
+                    Sell on Marketplace
+                </h3>
+                <p className="text-sm text-slate-400">List this ticket on the secondary marketplace. The event organizer will receive a 10% royalty on the sale.</p>
+                <div className="flex gap-4">
+                    <Input 
+                        type="number" 
+                        placeholder="Price in STX" 
+                        className="bg-slate-950 border-white/10 text-white"
+                        id="list-price"
+                    />
+                    <Button 
+                        className="bg-purple-600 hover:bg-purple-700 text-white"
+                        onClick={() => {
+                            const priceInput = document.getElementById('list-price') as HTMLInputElement;
+                            const price = priceInput?.value;
+                            if (price) {
+                                console.log('Listing ticket', selectedTicket.id, 'for', price, 'STX');
+                                // In a real app, openContractCall 'list-ticket'
+                                alert('Listing initiated for ' + price + ' STX');
+                            }
+                        }}
+                    >
+                        List Ticket
+                    </Button>
+                </div>
+            </Card>
+          )}
+
+          {selectedTicket.isListed && (
+              <Card className="mt-8 p-6 bg-slate-900 border-purple-500/50 space-y-4">
+                <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                    <Store className="w-5 h-5 text-purple-500" />
+                    Currently Listed
+                </h3>
+                <p className="text-sm text-slate-400">This ticket is currently listed on the marketplace.</p>
+                <Button 
+                    variant="outline"
+                    className="border-red-500/50 text-red-400 hover:bg-red-500/10"
+                    onClick={() => {
+                        console.log('Unlisting ticket', selectedTicket.id);
+                        // In a real app, openContractCall 'unlist-ticket'
+                        alert('Unlisting initiated');
+                    }}
+                >
+                    Cancel Listing
+                </Button>
+              </Card>
+          )}
+
         </div>
       </div>
     );
