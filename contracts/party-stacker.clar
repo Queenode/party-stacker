@@ -160,7 +160,46 @@
     )
 )
 
-;; 3. Check-In (Organizer Only)
+;; 3. Airdrop Ticket (Organizer Only)
+(define-public (airdrop-ticket (event-id uint) (tier uint) (recipient principal))
+    (let
+        (
+            (event (unwrap! (map-get? events { event-id: event-id }) err-event-not-found))
+            (tier-data (unwrap! (map-get? event-tiers { event-id: event-id, tier: tier }) err-tier-not-found))
+            (ticket-id (+ (var-get last-ticket-id) u1))
+            (capacity (get capacity tier-data))
+            (sold (get sold tier-data))
+            (organizer (get organizer event))
+        )
+        (asserts! (is-eq tx-sender organizer) err-owner-only)
+        (asserts! (< sold capacity) err-ticket-sold-out)
+
+        ;; Mint NFT Ticket directly to recipient
+        (try! (nft-mint? ticket ticket-id recipient))
+
+        ;; Update Tier Stats (Increment sold)
+        (map-set event-tiers 
+            { event-id: event-id, tier: tier }
+            (merge tier-data { sold: (+ sold u1) })
+        )
+
+        ;; Store Ticket Metadata
+        (map-insert ticket-details
+            { ticket-id: ticket-id }
+            {
+                event-id: event-id,
+                tier: tier,
+                owner: recipient,
+                checked-in: false
+            }
+        )
+
+        (var-set last-ticket-id ticket-id)
+        (ok ticket-id)
+    )
+)
+
+;; 4. Check-In (Organizer Only)
 (define-public (check-in (ticket-id uint))
     (let
         (
