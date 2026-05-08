@@ -4,9 +4,21 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ArrowLeft, Plus, BarChart3, Users, DollarSign, Ticket } from 'lucide-react';
+import { ArrowLeft, Plus, BarChart3, Users, DollarSign, Ticket, Activity } from 'lucide-react';
 import { useWalletStore } from '@/lib/store';
 import type { Event, EventAnalytics } from '@/lib/types';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
+
+const mockChartData = [
+  { name: 'Mon', sales: 4, revenue: 200 },
+  { name: 'Tue', sales: 7, revenue: 350 },
+  { name: 'Wed', sales: 5, revenue: 250 },
+  { name: 'Thu', sales: 12, revenue: 600 },
+  { name: 'Fri', sales: 25, revenue: 1250 },
+  { name: 'Sat', sales: 45, revenue: 2250 },
+  { name: 'Sun', sales: 60, revenue: 3000 },
+];
+
 
 export default function DashboardPage() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -243,9 +255,41 @@ export default function DashboardPage() {
                       </div>
                     )}
 
+                    {/* Recharts Analytics Chart */}
+                    <div className="border-t border-white/10 pt-6 mt-6">
+                      <h4 className="font-semibold text-white mb-4 flex items-center gap-2">
+                        <Activity className="w-5 h-5 text-orange-500" />
+                        Sales Activity (7 Days)
+                      </h4>
+                      <div className="h-64 w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <AreaChart
+                            data={mockChartData}
+                            margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                          >
+                            <defs>
+                              <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#f97316" stopOpacity={0.3}/>
+                                <stop offset="95%" stopColor="#f97316" stopOpacity={0}/>
+                              </linearGradient>
+                            </defs>
+                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" vertical={false} />
+                            <XAxis dataKey="name" stroke="rgba(255,255,255,0.5)" tick={{fill: 'rgba(255,255,255,0.5)', fontSize: 12}} tickLine={false} axisLine={false} />
+                            <YAxis stroke="rgba(255,255,255,0.5)" tick={{fill: 'rgba(255,255,255,0.5)', fontSize: 12}} tickLine={false} axisLine={false} />
+                            <RechartsTooltip 
+                              contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }}
+                              itemStyle={{ color: '#f97316' }}
+                            />
+                            <Area type="monotone" dataKey="revenue" stroke="#f97316" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
+                          </AreaChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+
                     {/* Actions */}
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 pt-4">
                       <Link href={`/event/${event.id}`} className="flex-1">
+
                         <Button variant="outline" className="w-full bg-transparent">
                           View Event
                         </Button>
