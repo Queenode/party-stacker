@@ -14,8 +14,8 @@ import Image from 'next/image';
 import { Switch } from '@/components/ui/switch';
 // Imports removed (dynamic imports used instead)
 
-const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || 'ST1B27X06M4SF2TE46G3VBA7KSR4KBMJCTK862QET';
-const CONTRACT_NAME = process.env.NEXT_PUBLIC_CONTRACT_NAME || 'Party-stacker-contract2';
+const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || 'SP1B27X06M4SF2TE46G3VBA7KSR4KBMJCTHM6BES4';
+const CONTRACT_NAME = process.env.NEXT_PUBLIC_CONTRACT_NAME || 'partystacker';
 
 export default function CreatePage() {
   const router = useRouter();
@@ -109,11 +109,11 @@ export default function CreatePage() {
 
       // Dynamically import Stacks libraries to avoid SSR build errors
       const { openContractCall } = await import('@stacks/connect');
-      const { StacksTestnet } = await import('@stacks/network');
+      const { StacksMainnet } = await import('@stacks/network');
       const { uintCV, stringAsciiCV, boolCV } = await import('@stacks/transactions');
 
       await openContractCall({
-        network: new StacksTestnet(),
+        network: new StacksMainnet(),
         contractAddress: CONTRACT_ADDRESS,
         contractName: CONTRACT_NAME,
         functionName: 'create-event',

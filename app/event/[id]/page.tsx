@@ -15,8 +15,8 @@ import type { Event, Ticket, TicketTier } from '@/lib/types';
 import Link from 'next/link';
 // Imports removed (dynamic imports used instead)
 
-const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || 'ST1B27X06M4SF2TE46G3VBA7KSR4KBMJCTK862QET';
-const CONTRACT_NAME = process.env.NEXT_PUBLIC_CONTRACT_NAME || 'Party-stacker-contract2';
+const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || 'SP1B27X06M4SF2TE46G3VBA7KSR4KBMJCTHM6BES4';
+const CONTRACT_NAME = process.env.NEXT_PUBLIC_CONTRACT_NAME || 'partystacker';
 
 export default function EventPage() {
   const params = useParams();
@@ -142,7 +142,7 @@ export default function EventPage() {
 
       // Dynamically import Stacks libraries to avoid SSR build errors
       const { openContractCall } = await import('@stacks/connect');
-      const { StacksTestnet } = await import('@stacks/network');
+      const { StacksMainnet } = await import('@stacks/network');
       const { uintCV, Pc } = await import('@stacks/transactions');
 
       const postCondition = Pc.principal(address)
@@ -153,7 +153,7 @@ export default function EventPage() {
 
       const txData = await new Promise<{ txId: string; txRaw?: string }>((resolve, reject) => {
         openContractCall({
-          network: new StacksTestnet(),
+          network: new StacksMainnet(),
           contractAddress: CONTRACT_ADDRESS,
           contractName: CONTRACT_NAME,
           functionName: 'buy-ticket',
@@ -187,7 +187,7 @@ export default function EventPage() {
       const paymentPayload = {
         x402Version: 2,
         resource: paymentInfo.resource || { url: `partystacker://event/${eventId}/ticket/${pendingTier}` },
-        accepted: paymentRequirements || { asset: 'STX', amount: 0, network: 'testnet' },
+        accepted: paymentRequirements || { asset: 'STX', amount: 0, network: 'mainnet' },
         payload: {
           transaction: txId,
           txRaw: txRaw || undefined,
@@ -280,7 +280,7 @@ export default function EventPage() {
                   </p>
                   {paymentInfo.transaction && (
                     <a
-                      href={getExplorerURL(paymentInfo.transaction, 'testnet')}
+                      href={getExplorerURL(paymentInfo.transaction, 'mainnet')}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
@@ -289,7 +289,7 @@ export default function EventPage() {
                     </a>
                   )}
                   <p className="text-xs text-green-600 dark:text-green-400 font-mono">
-                    Protocol: x402 V2 • Network: Stacks Testnet
+                    Protocol: x402 V2 • Network: Stacks Mainnet
                   </p>
                 </div>
               </div>
