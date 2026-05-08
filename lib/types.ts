@@ -19,6 +19,7 @@ export interface Event {
   metadataUri?: string;
   createdAt: number;
   status: 'upcoming' | 'live' | 'ended';
+  soulbound: boolean;
 }
 
 export interface Ticket {
@@ -33,6 +34,16 @@ export interface Ticket {
   nftMinted: boolean;
   nftTokenId?: string;
   createdAt: number;
+  isListed?: boolean;
+  listingPrice?: number;
+}
+
+export interface TicketListing {
+  ticketId: string;
+  price: number;
+  seller: string;
+  eventTitle: string;
+  tier: TicketTier;
 }
 
 export interface QRPayload {
@@ -66,6 +77,7 @@ export interface CreateEventInput {
     vip: { price: number; available: number };
     backstage: { price: number; available: number };
   };
+  soulbound: boolean;
 }
 
 export interface EventAnalytics {

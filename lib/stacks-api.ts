@@ -40,6 +40,7 @@ export async function fetchEventFromChain(id: number): Promise<Event | null> {
     const title = data.title.value;
     const metadataUri = data['metadata-uri'].value;
     const organizer = data.organizer.value;
+    const soulbound = data.soulbound?.value === true || data.soulbound?.type === 'true';
     
     // Parse Tiers
     // tiersJson.value.value is likely a list of optionals (some/none)
@@ -106,7 +107,8 @@ export async function fetchEventFromChain(id: number): Promise<Event | null> {
       createdAt: Date.now(),
       status: 'upcoming',
       metadataUri,
-      onChainId: id
+      onChainId: id,
+      soulbound
     };
 
   } catch (error) {
@@ -155,4 +157,20 @@ export async function getAllEventsFromChain(): Promise<Event[]> {
     console.error('Error fetching events from chain:', error);
     return [];
   }
+}
+
+export async function fetchTicketListing(ticketId: number) {
+    try {
+        const result = await callReadOnlyFunction({
+            network: NETWORK,
+            contractAddress: CONTRACT_ADDRESS,
+            contractName: CONTRACT_NAME,
+            functionName: 'get-ticket-listing', // Wait, I didn't write this function in the contract!
+            functionArgs: [uintCV(ticketId)],
+            senderAddress: CONTRACT_ADDRESS,
+        });
+        return cvToJSON(result);
+    } catch (e) {
+        return null;
+    }
 }
