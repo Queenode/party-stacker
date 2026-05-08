@@ -7,10 +7,11 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { ArrowLeft, Wallet, Calendar, MapPin, Zap, Image as ImageIcon, Ticket } from 'lucide-react';
+import { ArrowLeft, Wallet, Calendar, MapPin, Zap, Image as ImageIcon, Ticket, Shield } from 'lucide-react';
 import { useStacksWallet } from '@/lib/useStacksWallet';
 import type { CreateEventInput } from '@/lib/types';
 import Image from 'next/image';
+import { Switch } from '@/components/ui/switch';
 // Imports removed (dynamic imports used instead)
 
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || 'ST1B27X06M4SF2TE46G3VBA7KSR4KBMJCTK862QET';
@@ -39,6 +40,7 @@ export default function CreatePage() {
       vip: { price: 150, available: 100 },
       backstage: { price: 500, available: 20 },
     },
+    soulbound: false,
   });
 
   const handleConnectWallet = async () => {
@@ -108,7 +110,7 @@ export default function CreatePage() {
       // Dynamically import Stacks libraries to avoid SSR build errors
       const { openContractCall } = await import('@stacks/connect');
       const { StacksTestnet } = await import('@stacks/network');
-      const { uintCV, stringAsciiCV } = await import('@stacks/transactions');
+      const { uintCV, stringAsciiCV, boolCV } = await import('@stacks/transactions');
 
       await openContractCall({
         network: new StacksTestnet(),
@@ -123,7 +125,8 @@ export default function CreatePage() {
           uintCV(formData.tiers.vip.price * 1_000_000),
           uintCV(formData.tiers.vip.available),
           uintCV(formData.tiers.backstage.price * 1_000_000),
-          uintCV(formData.tiers.backstage.available)
+          uintCV(formData.tiers.backstage.available),
+          boolCV(formData.soulbound)
         ],
         onFinish: (txData) => {
           console.log('[PartyStacker] Contract Call Sent:', txData);
@@ -339,6 +342,25 @@ export default function CreatePage() {
                 onChange={(e) => handleInputChange('description', e.target.value)}
                 className="bg-slate-900/50 border-white/10 text-white placeholder:text-slate-600 focus:border-orange-500/50 min-h-32"
               />
+            </div>
+
+            {/* Settings Group */}
+            <div className="space-y-4 pt-4 border-t border-white/5">
+              <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                <Shield className="w-5 h-5 text-orange-500" />
+                Advanced Settings
+              </h3>
+              
+              <div className="flex items-center justify-between p-4 rounded-xl bg-slate-900/40 border border-white/5">
+                <div className="space-y-1">
+                  <h4 className="font-semibold text-white">Soulbound Tickets</h4>
+                  <p className="text-sm text-slate-400">Make tickets non-transferable (cannot be resold on secondary market).</p>
+                </div>
+                <Switch 
+                  checked={formData.soulbound}
+                  onCheckedChange={(checked) => handleInputChange('soulbound', checked)}
+                />
+              </div>
             </div>
 
             {/* Visuals Group */}
