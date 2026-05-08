@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Ticket, BarChart3, QrCode, Wallet, Calendar } from 'lucide-react';
+import { Ticket, BarChart3, QrCode, Wallet, Calendar, Store } from 'lucide-react';
 import { useStacksWallet } from '@/lib/useStacksWallet';
 
 export function Navbar() {
@@ -23,6 +23,12 @@ export function Navbar() {
                         <Button variant="ghost" size="sm" className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
                             <Calendar className="w-4 h-4 mr-1" />
                             <span className="hidden sm:inline">Explore Events</span>
+                        </Button>
+                    </Link>
+                    <Link href="/marketplace">
+                        <Button variant="ghost" size="sm" className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
+                            <Store className="w-4 h-4 mr-1" />
+                            <span className="hidden sm:inline">Marketplace</span>
                         </Button>
                     </Link>
 
