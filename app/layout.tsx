@@ -22,6 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="talentapp:project_verification" content="5422f34b85d07582534b5e1754ebaa930ea00828493dc46bf25450fcb39b54c3f3da3fe7de757398e4948675b61df07a37564c180f0301eea09b22972dd8d9ba" />
+      </head>
       <body className={`${_geist.className} antialiased min-h-screen bg-slate-950 text-slate-100 selection:bg-orange-500/30`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
