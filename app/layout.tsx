@@ -16,6 +16,7 @@ export const metadata: Metadata = {
 }
 
 import { Starfield } from "@/components/Starfield"
+import { FloatingCreateButton } from "@/components/FloatingCreateButton"
 
 export default function RootLayout({
   children,
@@ -37,6 +38,7 @@ export default function RootLayout({
           <Starfield />
           <Navbar />
           {children}
+          <FloatingCreateButton />
         </ThemeProvider>
       </body>
     </html>
