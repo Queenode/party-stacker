@@ -27,7 +27,7 @@ export default function RootLayout({
       <head>
         <meta name="talentapp:project_verification" content="5422f34b85d07582534b5e1754ebaa930ea00828493dc46bf25450fcb39b54c3f3da3fe7de757398e4948675b61df07a37564c180f0301eea09b22972dd8d9ba" />
       </head>
-      <body className={`${outfit.variable} ${inter.variable} font-outfit antialiased min-h-screen bg-slate-950 text-slate-100 selection:bg-orange-500/30`} suppressHydrationWarning>
+      <body className={`${outfit.variable} ${inter.variable} font-outfit antialiased min-h-screen bg-slate-950 text-slate-100 selection:bg-orange-500/30 noise-overlay`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

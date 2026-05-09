@@ -159,6 +159,21 @@ body {
     animation: fade-in-up 0.8s ease-out forwards;
   }
 
+  /* Noise Texture Overlay */
+  .noise-overlay::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+    filter: contrast(150%) brightness(100%);
+  }
+
   /* Custom Premium Scrollbar */
   ::-webkit-scrollbar {
     width: 10px;
