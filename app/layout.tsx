@@ -35,6 +35,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
+          <div className="premium-beam z-50" />
           <Starfield />
           <Navbar />
           {children}
