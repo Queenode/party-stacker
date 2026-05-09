@@ -17,6 +17,7 @@ export const metadata: Metadata = {
 
 import { Starfield } from "@/components/Starfield"
 import { FloatingCreateButton } from "@/components/FloatingCreateButton"
+import { ScrollIndicator } from "@/components/ScrollIndicator"
 
 export default function RootLayout({
   children,
@@ -35,6 +36,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
+          <ScrollIndicator />
           <div className="premium-beam z-50" />
           <Starfield />
           <Navbar />
