@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ArrowRight, Zap, Shield, Ticket, Users, BarChart3, QrCode, Wallet, Calendar, MapPin } from 'lucide-react';
 import { HeroSlider } from '@/components/HeroSlider';
+import { motion } from 'framer-motion';
 import type { Event } from '@/lib/types';
 
 
@@ -166,55 +167,59 @@ export default function Home() {
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {events.slice(0, 3).map((event, index) => (
-                <Link
+                <motion.div
                   key={event.id}
-                  href={`/event/${event.id}`}
-                  className="opacity-0 animate-fade-in-up"
-                  style={{ animationDelay: `${index * 150}ms` }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  whileHover={{ y: -5 }}
                 >
-                  <Card className="shiny-card group overflow-hidden h-full">
-                    <div className="relative h-56 bg-slate-950 overflow-hidden">
-                      {event.imageUrl ? (
-                        <Image
-                          src={event.imageUrl}
-                          alt={event.title}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
-                        />
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center bg-slate-900">
-                          <Ticket className="w-12 h-12 text-slate-700" />
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-90" />
-                      <div className="absolute bottom-4 left-4 right-4">
-                        <span className="inline-block px-3 py-1 bg-orange-500 text-white text-xs font-bold rounded-full mb-2 shadow-lg shadow-orange-500/20">
-                          {event.tiers?.general?.price ?? '?'} STX
-                        </span>
-                        <h3 className="text-xl font-bold text-white leading-tight mt-1 line-clamp-1 group-hover:text-orange-400 transition-colors">
-                          {event.title}
-                        </h3>
-                      </div>
-                    </div>
-
-                    <div className="p-6 space-y-4">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <p className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-1">Organizer</p>
-                          <p className="text-sm text-slate-300 font-medium line-clamp-1">{event.organizerName || 'Anonymous'}</p>
-                        </div>
-                        {event.tiers?.general && (
-                          <div className="text-right">
-                            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Available</p>
-                            <p className="text-sm font-bold text-white">
-                              {event.tiers.general.available - event.tiers.general.sold} <span className="text-slate-500">/</span> {event.tiers.general.available}
-                            </p>
+                  <Link href={`/event/${event.id}`}>
+                    <Card className="shiny-card group overflow-hidden h-full border border-white/5 hover:border-orange-500/30 transition-colors">
+                      <div className="relative h-56 bg-slate-950 overflow-hidden">
+                        {event.imageUrl ? (
+                          <Image
+                            src={event.imageUrl}
+                            alt={event.title}
+                            fill
+                            className="object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center bg-slate-900">
+                            <Ticket className="w-12 h-12 text-slate-700" />
                           </div>
                         )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-90" />
+                        <div className="absolute bottom-4 left-4 right-4">
+                          <span className="inline-block px-3 py-1 bg-orange-500 text-white text-xs font-bold rounded-full mb-2 shadow-lg shadow-orange-500/20">
+                            {event.tiers?.general?.price ?? '?'} STX
+                          </span>
+                          <h3 className="text-xl font-bold text-white leading-tight mt-1 line-clamp-1 group-hover:text-orange-400 transition-colors">
+                            {event.title}
+                          </h3>
+                        </div>
                       </div>
-                    </div>
-                  </Card>
-                </Link>
+
+                      <div className="p-6 space-y-4">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <p className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-1">Organizer</p>
+                            <p className="text-sm text-slate-300 font-medium line-clamp-1">{event.organizerName || 'Anonymous'}</p>
+                          </div>
+                          {event.tiers?.general && (
+                            <div className="text-right">
+                              <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Available</p>
+                              <p className="text-sm font-bold text-white">
+                                {event.tiers.general.available - event.tiers.general.sold} <span className="text-slate-500">/</span> {event.tiers.general.available}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </Card>
+                  </Link>
+                </motion.div>
               ))}
             </div>
           )}
