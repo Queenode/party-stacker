@@ -15,6 +15,8 @@ export const metadata: Metadata = {
   generator: 'v0.app',
 }
 
+import { Starfield } from "@/components/Starfield"
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -32,6 +34,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
+          <Starfield />
           <Navbar />
           {children}
         </ThemeProvider>
