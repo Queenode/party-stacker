@@ -1,13 +1,13 @@
 import React from "react"
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Outfit, Inter } from 'next/font/google'
 
 import { ThemeProvider } from "@/components/theme-provider"
 import { Navbar } from "@/components/Navbar"
 import './globals.css'
 
-const _geist = Geist({ subsets: ['latin'] })
-const _geistMono = Geist_Mono({ subsets: ['latin'] })
+const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit' })
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
   title: 'PartyStacker - Blockchain Event Ticketing',
@@ -25,7 +25,7 @@ export default function RootLayout({
       <head>
         <meta name="talentapp:project_verification" content="5422f34b85d07582534b5e1754ebaa930ea00828493dc46bf25450fcb39b54c3f3da3fe7de757398e4948675b61df07a37564c180f0301eea09b22972dd8d9ba" />
       </head>
-      <body className={`${_geist.className} antialiased min-h-screen bg-slate-950 text-slate-100 selection:bg-orange-500/30`} suppressHydrationWarning>
+      <body className={`${outfit.variable} ${inter.variable} font-outfit antialiased min-h-screen bg-slate-950 text-slate-100 selection:bg-orange-500/30`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
