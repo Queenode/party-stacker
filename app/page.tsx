@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/card';
 import { ArrowRight, Zap, Shield, Ticket, Users, BarChart3, QrCode, Wallet, Calendar, MapPin } from 'lucide-react';
 import { HeroSlider } from '@/components/HeroSlider';
 import { motion } from 'framer-motion';
+import { Magnetic } from '@/components/Magnetic';
 import type { Event } from '@/lib/types';
 
 
@@ -249,12 +250,14 @@ export default function Home() {
               Create a blockchain-powered event in minutes with x402-stacks. No technical knowledge required.
             </p>
           </div>
-          <Link href="/create">
-            <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-14 px-8 rounded-full shadow-[0_0_30px_rgba(249,115,22,0.4)] hover:shadow-[0_0_50px_rgba(249,115,22,0.6)] transition-all transform hover:-translate-y-1">
-              Get Started Now
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </Link>
+          <Magnetic>
+            <Link href="/create">
+              <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-14 px-8 rounded-full shadow-[0_0_30px_rgba(249,115,22,0.4)] hover:shadow-[0_0_50px_rgba(249,115,22,0.6)] transition-all">
+                Get Started Now
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+          </Magnetic>
         </div>
       </section>
 
