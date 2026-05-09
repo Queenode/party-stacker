@@ -10,3 +10,8 @@ node_modules/
 .next/
 .env*.local
 .DS_Store
+
+# Bot Secrets
+scripts/
+bot.log
+interaction.log
