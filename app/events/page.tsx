@@ -8,11 +8,15 @@ import { Card } from '@/components/ui/card';
 import { Ticket, Calendar, MapPin, Search } from 'lucide-react';
 import type { Event } from '@/lib/types';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 
 export default function EventsPage() {
     const [events, setEvents] = useState<Event[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState<string>('All');
+
+    const categories = ['All', 'Music', 'Tech', 'Party', 'Art', 'Conference'];
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -30,10 +34,12 @@ export default function EventsPage() {
         fetchEvents();
     }, []);
 
-    const filteredEvents = events.filter(event =>
-        event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.organizerName?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredEvents = events.filter(event => {
+        const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            event.organizerName?.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesCategory = selectedCategory === 'All' || event.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+    });
 
     return (
         <main className="min-h-screen bg-slate-950 pt-32 pb-12 px-4 sm:px-6 lg:px-8">
@@ -42,18 +48,37 @@ export default function EventsPage() {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                     <div>
-                        <h1 className="text-4xl font-bold text-white mb-2">Explore Events</h1>
+                        <h1 className="text-4xl font-bold text-white mb-2 italic uppercase tracking-tighter">Explore Events</h1>
                         <p className="text-slate-400">Discover and book tickets for the hottest parties on Stacks.</p>
                     </div>
                     <div className="relative w-full md:w-96">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                         <Input
                             placeholder="Search events, organizers..."
-                            className="pl-10 bg-slate-900 border-white/10 text-white"
+                            className="pl-10 bg-slate-900 border-white/10 text-white focus:border-orange-500/50"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
+                </div>
+
+                {/* Categories */}
+                <div className="flex flex-wrap gap-2 py-4">
+                    {categories.map((cat) => (
+                        <Button
+                            key={cat}
+                            variant="ghost"
+                            onClick={() => setSelectedCategory(cat)}
+                            className={cn(
+                                "px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all",
+                                selectedCategory === cat 
+                                    ? "bg-white text-slate-950 shadow-[0_0_15px_rgba(255,255,255,0.3)] scale-105" 
+                                    : "bg-white/5 text-slate-500 hover:text-white hover:bg-white/10"
+                            )}
+                        >
+                            {cat}
+                        </Button>
+                    ))}
                 </div>
 
                 {/* Events Grid */}
