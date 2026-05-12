@@ -249,6 +249,22 @@
     )
 )
 
+;; 7. Set Tier Price (Organizer Only)
+(define-public (set-tier-price (event-id uint) (tier uint) (new-price uint))
+    (let
+        (
+            (event (unwrap! (map-get? events { event-id: event-id }) err-event-not-found))
+            (tier-data (unwrap! (map-get? event-tiers { event-id: event-id, tier: tier }) err-tier-not-found))
+        )
+        (asserts! (is-eq tx-sender (get organizer event)) err-owner-only)
+        (map-set event-tiers
+            { event-id: event-id, tier: tier }
+            (merge tier-data { price: new-price })
+        )
+        (ok true)
+    )
+)
+
 ;; 4. SIP-009: Transfer
 (define-public (transfer (id uint) (sender principal) (recipient principal))
     (let
