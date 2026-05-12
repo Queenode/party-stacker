@@ -4,7 +4,7 @@ import type { Event } from './types';
 
 const NETWORK = new StacksMainnet({ url: 'https://api.mainnet.hiro.so' });
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || 'SP1B27X06M4SF2TE46G3VBA7KSR4KBMJCTHM6BES4';
-const CONTRACT_NAME = process.env.NEXT_PUBLIC_CONTRACT_NAME || 'partystacker';
+const CONTRACT_NAME = process.env.NEXT_PUBLIC_CONTRACT_NAME || 'partystacker-v2';
 
 // Helper to fetch single event
 export async function fetchEventFromChain(id: number): Promise<Event | null> {
