@@ -7,11 +7,17 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ArrowLeft, QrCode, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
+import { openContractCall } from '@stacks/connect';
+import { uintCV, AnchorMode, PostConditionMode } from '@stacks/transactions';
+
+const CONTRACT_ADDRESS = 'SP1B27X06M4SF2TE46G3VBA7KSR4KBMJCTHM6BES4';
+const CONTRACT_NAME = 'partystacker-v2';
 
 export default function VerifyPage() {
   const [ticketId, setTicketId] = useState('');
   const [status, setStatus] = useState<'idle' | 'verifying' | 'valid' | 'invalid'>('idle');
   const [scanMode, setScanMode] = useState(false);
+  const [broadcasting, setBroadcasting] = useState(false);
 
   const verifyTicket = async (id: string) => {
     if (!id) return;
@@ -52,6 +58,32 @@ export default function VerifyPage() {
     } catch (e) {
       console.error(e);
       setStatus('invalid');
+    }
+  };
+
+  const handleCheckIn = async () => {
+    if (!ticketId) return;
+    setBroadcasting(true);
+    
+    try {
+      await openContractCall({
+        contractAddress: CONTRACT_ADDRESS,
+        contractName: CONTRACT_NAME,
+        functionName: 'check-in',
+        functionArgs: [uintCV(ticketId)],
+        anchorMode: AnchorMode.Any,
+        postConditionMode: PostConditionMode.Allow,
+        onFinish: (data) => {
+          console.log('Check-in TX Sent:', data.txId);
+          alert(`Check-in broadcasted! TX: ${data.txId}`);
+          setStatus('idle');
+          setTicketId('');
+        },
+      });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setBroadcasting(false);
     }
   };
 
@@ -157,25 +189,35 @@ export default function VerifyPage() {
               </div>
 
               {status === 'valid' && (
-                <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 flex items-center gap-4 animate-in fade-in slide-in-from-bottom-2">
-                  <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center shadow-lg shadow-green-500/20">
-                    <CheckCircle className="w-6 h-6 text-white" />
+                <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  <div className="glass-card bg-green-500/10 border border-green-500/20 rounded-2xl p-6 flex items-center gap-5">
+                    <div className="w-14 h-14 rounded-full bg-green-500 flex items-center justify-center shadow-[0_0_20px_rgba(34,197,94,0.4)]">
+                      <CheckCircle className="w-8 h-8 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-black text-white italic uppercase tracking-tight">Valid Ticket</h3>
+                      <p className="text-sm text-green-300/80">Found in V2.1 Contract</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-white">Valid Ticket</h3>
-                    <p className="text-xs text-green-300">Verified on Stacks Blockchain</p>
-                  </div>
+
+                  <Button 
+                    onClick={handleCheckIn}
+                    disabled={broadcasting}
+                    className="w-full h-16 bg-white text-slate-900 font-black text-lg hover:bg-slate-200 shadow-xl"
+                  >
+                    {broadcasting ? <Loader2 className="w-6 h-6 animate-spin" /> : 'Confirm Check-In'}
+                  </Button>
                 </div>
               )}
 
               {status === 'invalid' && (
-                <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex items-center gap-4 animate-in fade-in slide-in-from-bottom-2">
-                  <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center shadow-lg shadow-red-500/20">
-                    <XCircle className="w-6 h-6 text-white" />
+                <div className="glass-card bg-red-500/10 border border-red-500/20 rounded-2xl p-6 flex items-center gap-5 animate-in fade-in slide-in-from-bottom-4">
+                  <div className="w-14 h-14 rounded-full bg-red-500 flex items-center justify-center shadow-[0_0_20px_rgba(239,68,68,0.4)]">
+                    <XCircle className="w-8 h-8 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-white">Invalid Ticket</h3>
-                    <p className="text-xs text-red-300">Ticket not found or expired</p>
+                    <h3 className="text-xl font-black text-white italic uppercase tracking-tight">Access Denied</h3>
+                    <p className="text-sm text-red-300/80">Ticket ID not recognized</p>
                   </div>
                 </div>
               )}
