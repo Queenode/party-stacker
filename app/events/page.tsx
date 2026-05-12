@@ -15,6 +15,8 @@ export default function EventsPage() {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
+    const [maxPrice, setMaxPrice] = useState<number>(1000);
+    const [sortBy, setSortBy] = useState<'date' | 'price' | 'popular'>('date');
 
     const categories = ['All', 'Music', 'Tech', 'Party', 'Art', 'Conference'];
 
@@ -38,7 +40,13 @@ export default function EventsPage() {
         const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             event.organizerName?.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = selectedCategory === 'All' || event.category === selectedCategory;
-        return matchesSearch && matchesCategory;
+        const price = event.tiers?.general?.price || 0;
+        const matchesPrice = price <= maxPrice;
+        return matchesSearch && matchesCategory && matchesPrice;
+    }).sort((a, b) => {
+        if (sortBy === 'price') return (a.tiers?.general?.price || 0) - (b.tiers?.general?.price || 0);
+        if (sortBy === 'popular') return (b.tiers?.general?.sold || 0) - (a.tiers?.general?.sold || 0);
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
     });
 
     return (
@@ -62,23 +70,53 @@ export default function EventsPage() {
                     </div>
                 </div>
 
-                {/* Categories */}
-                <div className="flex flex-wrap gap-2 py-4">
-                    {categories.map((cat) => (
-                        <Button
-                            key={cat}
-                            variant="ghost"
-                            onClick={() => setSelectedCategory(cat)}
-                            className={cn(
-                                "px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all",
-                                selectedCategory === cat 
-                                    ? "bg-white text-slate-950 shadow-[0_0_15px_rgba(255,255,255,0.3)] scale-105" 
-                                    : "bg-white/5 text-slate-500 hover:text-white hover:bg-white/10"
-                            )}
+                {/* Categories & Filters */}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 py-4 border-b border-white/5">
+                    <div className="flex flex-wrap gap-2">
+                        {categories.map((cat) => (
+                            <Button
+                                key={cat}
+                                variant="ghost"
+                                onClick={() => setSelectedCategory(cat)}
+                                className={cn(
+                                    "px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all",
+                                    selectedCategory === cat 
+                                        ? "bg-white text-slate-950 shadow-[0_0_15px_rgba(255,255,255,0.3)] scale-105" 
+                                        : "bg-white/5 text-slate-500 hover:text-white hover:bg-white/10"
+                                )}
+                            >
+                                {cat}
+                            </Button>
+                        ))}
+                    </div>
+
+                    <div className="flex items-center gap-6 w-full md:w-auto">
+                        <div className="flex-1 md:w-48 space-y-2">
+                            <div className="flex justify-between text-[10px] font-black uppercase text-slate-500 tracking-tighter">
+                                <span>Max Price</span>
+                                <span className="text-orange-500">{maxPrice} STX</span>
+                            </div>
+                            <input 
+                                type="range" 
+                                min="0" 
+                                max="1000" 
+                                step="10"
+                                value={maxPrice}
+                                onChange={(e) => setMaxPrice(parseInt(e.target.value))}
+                                className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                            />
+                        </div>
+
+                        <select 
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value as any)}
+                            className="bg-slate-900 border border-white/10 text-white text-xs font-bold p-2 rounded-lg outline-none focus:border-orange-500/50 transition-colors"
                         >
-                            {cat}
-                        </Button>
-                    ))}
+                            <option value="date">Sort: Date</option>
+                            <option value="price">Sort: Price</option>
+                            <option value="popular">Sort: Popular</option>
+                        </select>
+                    </div>
                 </div>
 
                 {/* Events Grid */}
