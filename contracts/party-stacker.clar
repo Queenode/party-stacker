@@ -110,6 +110,15 @@
             { price: price-b, capacity: cap-b, sold: u0 })
 
         (var-set last-event-id event-id)
+        
+        ;; Emit Event for Indexers
+        (print { 
+            action: "create-event", 
+            event-id: event-id, 
+            organizer: tx-sender, 
+            title: title 
+        })
+
         (ok event-id)
     )
 )
