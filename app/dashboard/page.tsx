@@ -8,6 +8,8 @@ import { ArrowLeft, Plus, BarChart3, Users, DollarSign, Ticket, Activity } from 
 import { useWalletStore } from '@/lib/store';
 import type { Event, EventAnalytics } from '@/lib/types';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
+import { StatsCard } from '@/components/StatsCard';
+import { AnimatedNumber } from '@/components/AnimatedNumber';
 
 const mockChartData = [
   { name: 'Mon', sales: 4, revenue: 200 },
@@ -162,64 +164,33 @@ export default function DashboardPage() {
 
                       {/* Analytics */}
                       {eventAnalytics && (
-                        <div className="grid grid-cols-2 gap-3">
-                          <Card className="p-4 bg-slate-700/50">
-                            <div className="flex items-center gap-2">
-                              <Ticket className="w-5 h-5 text-primary" />
-                              <div>
-                                <p className="text-xs text-muted-foreground">
-                                  Tickets Sold
-                                </p>
-                                <p className="text-2xl font-bold">
-                                  {eventAnalytics.totalTicketsSold}
-                                </p>
-                              </div>
-                            </div>
-                          </Card>
-
-                          <Card className="p-4 bg-slate-700/50">
-                            <div className="flex items-center gap-2">
-                              <Users className="w-5 h-5 text-primary" />
-                              <div>
-                                <p className="text-xs text-muted-foreground">
-                                  Checked In
-                                </p>
-                                <p className="text-2xl font-bold">
-                                  {eventAnalytics.checkedInCount}
-                                </p>
-                              </div>
-                            </div>
-                          </Card>
-
-                          <Card className="p-4 bg-slate-700/50">
-                            <div className="flex items-center gap-2">
-                              <DollarSign className="w-5 h-5 text-primary" />
-                              <div>
-                                <p className="text-xs text-muted-foreground">
-                                  Revenue
-                                </p>
-                                <p className="text-2xl font-bold">
-                                  ${eventAnalytics.totalRevenue.toFixed(0)}
-                                </p>
-                              </div>
-                            </div>
-                          </Card>
-
-                          <Card className="p-4 bg-slate-700/50">
-                            <div className="flex items-center gap-2">
-                              <div className="w-5 h-5 text-primary">
-                                <div className="text-lg">✨</div>
-                              </div>
-                              <div>
-                                <p className="text-xs text-muted-foreground">
-                                  NFTs Minted
-                                </p>
-                                <p className="text-2xl font-bold">
-                                  {eventAnalytics.nftsMinted}
-                                </p>
-                              </div>
-                            </div>
-                          </Card>
+                        <div className="grid grid-cols-2 gap-4">
+                          <StatsCard
+                            title="Tickets Sold"
+                            value={eventAnalytics.totalTicketsSold}
+                            icon={Ticket}
+                            trend={{ value: 12, isUp: true }}
+                            description="Total primary sales"
+                          />
+                          <StatsCard
+                            title="Checked In"
+                            value={eventAnalytics.checkedInCount}
+                            icon={Users}
+                            description="Real-time attendance"
+                          />
+                          <StatsCard
+                            title="Total Revenue"
+                            value={`$${eventAnalytics.totalRevenue.toFixed(0)}`}
+                            icon={DollarSign}
+                            trend={{ value: 8, isUp: true }}
+                            description="Gross STX sales"
+                          />
+                          <StatsCard
+                            title="NFTs Minted"
+                            value={eventAnalytics.nftsMinted}
+                            icon={Activity}
+                            description="On-chain assets"
+                          />
                         </div>
                       )}
                     </div>
