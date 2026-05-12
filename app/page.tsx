@@ -223,12 +223,16 @@ export default function Home() {
                             <p className="text-sm text-slate-300 font-medium line-clamp-1">{event.organizerName || 'Anonymous'}</p>
                           </div>
                           {event.tiers?.general && (
-                            <div className="text-right">
-                              <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Available</p>
-                              <p className="text-sm font-bold text-white">
-                                {event.tiers.general.available - event.tiers.general.sold} <span className="text-slate-500">/</span> {event.tiers.general.available}
-                              </p>
-                            </div>
+                              <div className="text-right">
+                                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Available</p>
+                                {event.tiers.general.sold >= event.tiers.general.available ? (
+                                  <span className="text-xs font-black text-red-500 uppercase tracking-tighter italic">Sold Out</span>
+                                ) : (
+                                  <p className="text-sm font-bold text-white">
+                                    {event.tiers.general.available - event.tiers.general.sold} <span className="text-slate-500">/</span> {event.tiers.general.available}
+                                  </p>
+                                )}
+                              </div>
                           )}
                         </div>
                       </div>
