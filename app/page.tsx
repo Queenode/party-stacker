@@ -5,7 +5,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ArrowRight, Zap, Shield, Ticket, Users, BarChart3, QrCode, Wallet, Calendar, MapPin, Activity, CheckCircle } from 'lucide-react';
+import { 
+  ArrowRight, Zap, Shield, Ticket, Users, BarChart3, 
+  QrCode, Wallet, Calendar, MapPin, Activity, CheckCircle,
+  Twitter, MessageSquare, Share2
+} from 'lucide-react';
 import { HeroSlider } from '@/components/HeroSlider';
 import { PlatformStats } from '@/components/PlatformStats';
 import { motion } from 'framer-motion';
@@ -284,30 +288,80 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-white/5 py-12 px-4 sm:px-6 lg:px-8 bg-slate-950">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+      {/* Enhanced Footer */}
+      <footer className="border-t border-white/5 py-24 px-4 sm:px-6 lg:px-8 bg-slate-950/50 backdrop-blur-3xl relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[1px] bg-gradient-to-r from-transparent via-orange-500/50 to-transparent" />
+        
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12">
+          {/* Brand & Newsletter */}
+          <div className="md:col-span-6 space-y-8">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center font-bold text-white text-xs shadow-lg shadow-orange-500/20">
-                ₿
+              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-pink-600 rounded-xl flex items-center justify-center font-black text-white text-lg shadow-[0_0_20px_rgba(249,115,22,0.4)] italic">
+                P
               </div>
-              <span className="font-bold text-white tracking-wide">PartyStacker</span>
+              <span className="font-black text-2xl text-white italic uppercase tracking-tighter">PartyStacker</span>
             </div>
-            <div className="flex items-center gap-6 text-sm text-slate-500">
-              <span>Built on <span className="font-semibold text-white">Stacks</span></span>
-              <span className="text-slate-700">•</span>
-              <span className="font-mono text-xs bg-white/5 px-2 py-1 rounded">x402-stacks V2</span>
+            
+            <div className="space-y-4 max-w-md">
+              <h4 className="text-sm font-black text-white uppercase tracking-widest italic">Join the guestlist</h4>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                Stay updated with the hottest events and platform upgrades. No spam, just pure alpha.
+              </p>
+              <div className="flex gap-2 p-1 bg-white/5 rounded-xl border border-white/10 focus-within:border-orange-500/50 transition-all">
+                <input 
+                  type="email" 
+                  placeholder="your@email.com" 
+                  className="bg-transparent border-none text-white text-sm px-3 flex-1 outline-none"
+                />
+                <Button className="bg-white text-slate-950 font-black uppercase text-[10px] tracking-widest px-6 rounded-lg hover:bg-slate-200">
+                  Subscribe
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center gap-6">
-              <Link href="/verify" className="text-sm font-medium text-slate-400 hover:text-orange-400 transition-colors">
-                Verify
-              </Link>
-              <Link href="/dashboard" className="text-sm font-medium text-slate-400 hover:text-orange-400 transition-colors">
-                Dashboard
-              </Link>
+          </div>
 
+          {/* Quick Links */}
+          <div className="md:col-span-3 space-y-6">
+            <h4 className="text-sm font-black text-white uppercase tracking-widest italic">Navigation</h4>
+            <ul className="space-y-3">
+              {['Explore', 'Create', 'Verify', 'Dashboard'].map((link) => (
+                <li key={link}>
+                  <Link href={`/${link.toLowerCase()}`} className="text-slate-500 hover:text-orange-500 transition-colors text-sm font-bold">
+                    {link}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Social */}
+          <div className="md:col-span-3 space-y-6">
+            <h4 className="text-sm font-black text-white uppercase tracking-widest italic">Connect</h4>
+            <div className="flex gap-4">
+              <a href="#" className="p-3 bg-white/5 rounded-xl border border-white/10 text-slate-400 hover:text-white hover:border-orange-500/50 transition-all">
+                <Twitter className="w-5 h-5" />
+              </a>
+              <a href="#" className="p-3 bg-white/5 rounded-xl border border-white/10 text-slate-400 hover:text-white hover:border-orange-500/50 transition-all">
+                <MessageSquare className="w-5 h-5" />
+              </a>
+              <a href="#" className="p-3 bg-white/5 rounded-xl border border-white/10 text-slate-400 hover:text-white hover:border-orange-500/50 transition-all">
+                <Share2 className="w-5 h-5" />
+              </a>
             </div>
+            <p className="text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em]">
+              Built with <span className="text-orange-500/50">Stacks V2.1</span>
+            </p>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto pt-24 flex flex-col md:flex-row justify-between items-center gap-6 border-t border-white/5 mt-12">
+          <p className="text-[10px] font-bold text-slate-700 uppercase tracking-widest">
+            © 2026 PartyStacker Protocol. All Rights Reserved.
+          </p>
+          <div className="flex gap-8 text-[10px] font-bold text-slate-700 uppercase tracking-widest">
+            <a href="#" className="hover:text-slate-400">Terms</a>
+            <a href="#" className="hover:text-slate-400">Privacy</a>
+            <a href="#" className="hover:text-slate-400">Manifesto</a>
           </div>
         </div>
       </footer>
