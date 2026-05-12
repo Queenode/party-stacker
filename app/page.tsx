@@ -192,6 +192,20 @@ export default function Home() {
                           </div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-90" />
+                        <div className="absolute top-4 right-4 flex flex-col gap-2">
+                          {index === 0 && (
+                            <span className="px-2 py-1 bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-tighter italic rounded-md flex items-center gap-1">
+                              <Activity className="w-3 h-3 text-orange-500" />
+                              Trending Now
+                            </span>
+                          )}
+                          {event.organizerName === 'Queenode' && (
+                            <span className="px-2 py-1 bg-blue-500/20 backdrop-blur-md border border-blue-500/30 text-blue-400 text-[10px] font-black uppercase tracking-tighter rounded-md flex items-center gap-1">
+                              <CheckCircle className="w-3 h-3" />
+                              Verified
+                            </span>
+                          )}
+                        </div>
                         <div className="absolute bottom-4 left-4 right-4">
                           <span className="inline-block px-3 py-1 bg-orange-500 text-white text-xs font-bold rounded-full mb-2 shadow-lg shadow-orange-500/20">
                             {event.tiers?.general?.price ?? '?'} STX
