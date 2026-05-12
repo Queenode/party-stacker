@@ -10,6 +10,12 @@ import type { Event, EventAnalytics } from '@/lib/types';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
 import { StatsCard } from '@/components/StatsCard';
 import { AnimatedNumber } from '@/components/AnimatedNumber';
+import { openContractCall } from '@stacks/connect';
+import { uintCV, stringAsciiCV, boolCV, AnchorMode, PostConditionMode } from '@stacks/transactions';
+import { UpdateMetadataModal } from '@/components/UpdateMetadataModal';
+
+const CONTRACT_ADDRESS = 'SP1B27X06M4SF2TE46G3VBA7KSR4KBMJCTHM6BES4';
+const CONTRACT_NAME = 'partystacker-v2';
 
 const mockChartData = [
   { name: 'Mon', sales: 4, revenue: 200 },
@@ -28,8 +34,47 @@ export default function DashboardPage() {
     new Map()
   );
   const [loading, setLoading] = useState(true);
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
 
   const { address } = useWalletStore();
+
+  const handleUpdateMetadata = async (id: string, title: string, description: string) => {
+    await openContractCall({
+      contractAddress: CONTRACT_ADDRESS,
+      contractName: CONTRACT_NAME,
+      functionName: 'update-event-metadata',
+      functionArgs: [
+        uintCV(id),
+        stringAsciiCV(title),
+        stringAsciiCV(description.slice(0, 256)), // URI field used for desc in this demo
+      ],
+      anchorMode: AnchorMode.Any,
+      postConditionMode: PostConditionMode.Allow,
+      onFinish: (data) => {
+        console.log('TX Sent:', data.txId);
+        alert(`Transaction Sent! ID: ${data.txId}`);
+      },
+    });
+  };
+
+  const handleToggleStatus = async (event: Event) => {
+    const newStatus = event.status !== 'active';
+    await openContractCall({
+      contractAddress: CONTRACT_ADDRESS,
+      contractName: CONTRACT_NAME,
+      functionName: 'toggle-event-active',
+      functionArgs: [
+        uintCV(event.id),
+        boolCV(newStatus),
+      ],
+      anchorMode: AnchorMode.Any,
+      postConditionMode: PostConditionMode.Allow,
+      onFinish: (data) => {
+        console.log('TX Sent:', data.txId);
+        alert(`Status Update Sent! ID: ${data.txId}`);
+      },
+    });
+  };
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -269,7 +314,7 @@ export default function DashboardPage() {
                         <Button 
                           variant="secondary" 
                           className="w-full bg-orange-500/10 border border-orange-500/20 hover:bg-orange-500/20 text-orange-500 font-bold"
-                          onClick={() => alert('V2 Feature: Opening Metadata Editor...')}
+                          onClick={() => setEditingEvent(event)}
                         >
                           Update Metadata
                         </Button>
@@ -279,7 +324,7 @@ export default function DashboardPage() {
                         <Button 
                           variant="destructive" 
                           className="w-full bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 text-red-500 font-bold"
-                          onClick={() => alert('V2 Feature: Toggling Event Status...')}
+                          onClick={() => handleToggleStatus(event)}
                         >
                           {event.status === 'active' ? 'End Sales' : 'Resume Sales'}
                         </Button>
@@ -301,6 +346,15 @@ export default function DashboardPage() {
           )}
         </div>
       </div>
+      {/* Modals */}
+      {editingEvent && (
+        <UpdateMetadataModal 
+          isOpen={!!editingEvent}
+          onClose={() => setEditingEvent(null)}
+          event={editingEvent}
+          onUpdate={(title, desc) => handleUpdateMetadata(editingEvent.id, title, desc)}
+        />
+      )}
     </div>
   );
 }
