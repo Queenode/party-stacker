@@ -219,6 +219,21 @@
     )
 )
 
+;; 5. Toggle Event Active Status (Organizer Only)
+(define-public (toggle-event-active (event-id uint) (new-status bool))
+    (let
+        (
+            (event (unwrap! (map-get? events { event-id: event-id }) err-event-not-found))
+        )
+        (asserts! (is-eq tx-sender (get organizer event)) err-owner-only)
+        (map-set events
+            { event-id: event-id }
+            (merge event { active: new-status })
+        )
+        (ok true)
+    )
+)
+
 ;; 4. SIP-009: Transfer
 (define-public (transfer (id uint) (sender principal) (recipient principal))
     (let
