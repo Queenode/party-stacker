@@ -265,6 +265,22 @@
     )
 )
 
+;; 8. Update Tier Capacity (Organizer Only)
+(define-public (update-tier-capacity (event-id uint) (tier uint) (new-cap uint))
+    (let
+        (
+            (event (unwrap! (map-get? events { event-id: event-id }) err-event-not-found))
+            (tier-data (unwrap! (map-get? event-tiers { event-id: event-id, tier: tier }) err-tier-not-found))
+        )
+        (asserts! (is-eq tx-sender (get organizer event)) err-owner-only)
+        (map-set event-tiers
+            { event-id: event-id, tier: tier }
+            (merge tier-data { capacity: new-cap })
+        )
+        (ok true)
+    )
+)
+
 ;; 4. SIP-009: Transfer
 (define-public (transfer (id uint) (sender principal) (recipient principal))
     (let
