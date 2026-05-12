@@ -234,6 +234,14 @@
             { ticket-id: ticket-id }
             (merge ticket-data { checked-in: true })
         )
+
+        ;; Emit Event for Indexers
+        (print { 
+            action: "check-in", 
+            ticket-id: ticket-id, 
+            event-id: event-id
+        })
+
         (ok true)
     )
 )
