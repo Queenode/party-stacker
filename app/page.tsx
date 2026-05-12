@@ -5,8 +5,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ArrowRight, Zap, Shield, Ticket, Users, BarChart3, QrCode, Wallet, Calendar, MapPin } from 'lucide-react';
+import { ArrowRight, Zap, Shield, Ticket, Users, BarChart3, QrCode, Wallet, Calendar, MapPin, Activity, CheckCircle } from 'lucide-react';
 import { HeroSlider } from '@/components/HeroSlider';
+import { PlatformStats } from '@/components/PlatformStats';
 import { motion } from 'framer-motion';
 import { Magnetic } from '@/components/Magnetic';
 import type { Event } from '@/lib/types';
@@ -40,6 +41,10 @@ export default function Home() {
 
       {/* Hero Section */}
       <HeroSlider />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-20">
+        <PlatformStats />
+      </div>
 
       {/* Features Section */}
       <section id="features-section" className="relative py-24 px-4 sm:px-6 lg:px-8 border-b border-white/5 overflow-hidden">
