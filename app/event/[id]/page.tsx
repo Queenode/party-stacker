@@ -7,7 +7,10 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { TierSelector } from '@/components/TierSelector';
 import { QRCodeDisplay } from '@/components/QRCodeDisplay';
-import { ArrowLeft, Calendar, MapPin, Users, Zap, CheckCircle2, ExternalLink } from 'lucide-react';
+import { 
+  ArrowLeft, Calendar, MapPin, Users, Zap, CheckCircle2, 
+  ExternalLink, Share2, CalendarPlus, Twitter 
+} from 'lucide-react';
 import { useWalletStore } from '@/lib/store';
 import { useStacksWallet } from '@/lib/useStacksWallet';
 import { formatSTX, getExplorerURL, X402_HEADERS, encodePaymentHeader } from '@/lib/x402-client';
@@ -340,6 +343,46 @@ export default function EventPage() {
             <p className="text-lg md:text-xl text-slate-200 max-w-2xl font-light">
               Hosted by <span className="font-semibold text-white">{event.organizerName}</span>
             </p>
+
+            <div className="flex flex-wrap gap-4 pt-4">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="bg-white/5 border-white/10 text-white hover:bg-white/10"
+                onClick={() => {
+                  const url = encodeURIComponent(window.location.href);
+                  const text = encodeURIComponent(`I'm going to ${event.title}! Get tickets on PartyStacker:`);
+                  window.open(`https://warpcast.com/~/compose?text=${text}&embeds[]=${url}`, '_blank');
+                }}
+              >
+                <Share2 className="w-4 h-4 mr-2 text-purple-400" />
+                Cast to Farcaster
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="bg-white/5 border-white/10 text-white hover:bg-white/10"
+                onClick={() => {
+                  const url = encodeURIComponent(window.location.href);
+                  const text = encodeURIComponent(`I'm going to ${event.title}! Get tickets on @PartyStacker:`);
+                  window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+                }}
+              >
+                <Twitter className="w-4 h-4 mr-2 text-blue-400" />
+                Share to X
+              </Button>
+
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="bg-white/5 border-white/10 text-white hover:bg-white/10"
+                onClick={() => alert('V2 Feature: Adding to Calendar...')}
+              >
+                <CalendarPlus className="w-4 h-4 mr-2 text-orange-400" />
+                Add to Calendar
+              </Button>
+            </div>
           </div>
         </div>
       </div>
