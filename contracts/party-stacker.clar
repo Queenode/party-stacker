@@ -165,6 +165,16 @@
         )
 
         (var-set last-ticket-id ticket-id)
+
+        ;; Emit Event for Indexers
+        (print { 
+            action: "buy-ticket", 
+            event-id: event-id, 
+            ticket-id: ticket-id, 
+            buyer: tx-sender,
+            tier: tier 
+        })
+
         (ok ticket-id)
     )
 )
