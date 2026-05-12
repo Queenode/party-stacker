@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Ticket, Calendar, MapPin, Search } from 'lucide-react';
+import { Ticket, Calendar, MapPin, Search, CheckCircle } from 'lucide-react';
 import type { Event } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -120,6 +120,14 @@ export default function EventsPage() {
                                             </div>
                                         )}
                                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-90" />
+                                        <div className="absolute top-4 right-4">
+                                            {event.organizerName === 'Queenode' && (
+                                                <span className="px-2 py-1 bg-blue-500/20 backdrop-blur-md border border-blue-500/30 text-blue-400 text-[10px] font-black uppercase tracking-tighter rounded-md flex items-center gap-1 shadow-lg shadow-blue-500/20">
+                                                    <CheckCircle className="w-3 h-3" />
+                                                    Verified
+                                                </span>
+                                            )}
+                                        </div>
                                         <div className="absolute bottom-4 left-4 right-4">
                                             <span className="inline-block px-3 py-1 bg-orange-500 text-white text-xs font-bold rounded-full mb-2 shadow-lg shadow-orange-500/20">
                                                 {event.tiers?.general?.price ?? '?'} STX
