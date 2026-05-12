@@ -258,13 +258,41 @@ export default function DashboardPage() {
                     </div>
 
                     {/* Actions */}
-                    <div className="flex gap-2 pt-4">
-                      <Link href={`/event/${event.id}`} className="flex-1">
-
-                        <Button variant="outline" className="w-full bg-transparent">
-                          View Event
+                    <div className="flex flex-wrap gap-3 pt-6 border-t border-white/5">
+                      <Link href={`/event/${event.id}`} className="flex-1 min-w-[140px]">
+                        <Button variant="outline" className="w-full bg-white/5 border-white/10 hover:bg-white/10 text-white">
+                          View Public Page
                         </Button>
                       </Link>
+                      
+                      <div className="flex-1 min-w-[140px]">
+                        <Button 
+                          variant="secondary" 
+                          className="w-full bg-orange-500/10 border border-orange-500/20 hover:bg-orange-500/20 text-orange-500 font-bold"
+                          onClick={() => alert('V2 Feature: Opening Metadata Editor...')}
+                        >
+                          Update Metadata
+                        </Button>
+                      </div>
+
+                      <div className="flex-1 min-w-[140px]">
+                        <Button 
+                          variant="destructive" 
+                          className="w-full bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 text-red-500 font-bold"
+                          onClick={() => alert('V2 Feature: Toggling Event Status...')}
+                        >
+                          {event.status === 'active' ? 'End Sales' : 'Resume Sales'}
+                        </Button>
+                      </div>
+
+                      <div className="flex-1 min-w-[140px]">
+                        <Button 
+                          className="w-full bg-white text-slate-900 font-black hover:bg-slate-200"
+                          onClick={() => alert('V2 Feature: Opening Bulk Airdrop Tool...')}
+                        >
+                          Bulk Airdrop
+                        </Button>
+                      </div>
                     </div>
                   </Card>
                 );
