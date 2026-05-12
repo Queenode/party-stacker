@@ -316,6 +316,16 @@
  )
  
  ;; --- Read-Only Functions ---
+ 
+ ;; Helper: Check if tx-sender is the organizer of an event
+ (define-read-only (is-organizer (event-id uint) (user principal))
+    (let
+        (
+            (event (unwrap! (map-get? events { event-id: event-id }) false))
+        )
+        (is-eq user (get organizer event))
+    )
+ )
 
 ;; SIP-009: Get last token ID
 (define-read-only (get-last-token-id)
