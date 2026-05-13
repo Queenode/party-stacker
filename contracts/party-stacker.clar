@@ -416,6 +416,11 @@
     )
  )
 
+;; Helper: Get last event ID
+(define-read-only (get-last-event-id)
+    (ok (var-get last-event-id))
+)
+
 ;; SIP-009: Get last token ID
 (define-read-only (get-last-token-id)
     (ok (var-get last-ticket-id))
