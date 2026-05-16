@@ -138,7 +138,7 @@ export async function POST(req: NextRequest) {
     let txData: any = null;
 
     try {
-      const apiUrl = `https://api.testnet.hiro.so/extended/v1/tx/${txId}`;
+      const apiUrl = `https://api.mainnet.hiro.so/extended/v1/tx/${txId}`;
       const txResponse = await fetch(apiUrl, {
         headers: { Accept: 'application/json' },
         signal: AbortSignal.timeout(10000), // 10s timeout
