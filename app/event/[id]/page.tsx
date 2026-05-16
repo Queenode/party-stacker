@@ -9,7 +9,7 @@ import { TierSelector } from '@/components/TierSelector';
 import { QRCodeDisplay } from '@/components/QRCodeDisplay';
 import { 
   ArrowLeft, Calendar, MapPin, Users, Zap, CheckCircle2, 
-  ExternalLink, Share2, CalendarPlus, Twitter 
+  ExternalLink, Share2, CalendarPlus, Twitter, Link as LinkIcon
 } from 'lucide-react';
 import { useWalletStore } from '@/lib/store';
 import { useStacksWallet } from '@/lib/useStacksWallet';
@@ -381,6 +381,17 @@ export default function EventPage() {
               >
                 <CalendarPlus className="w-4 h-4 mr-2 text-orange-400" />
                 Add to Calendar
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="bg-white/5 border-white/10 text-white hover:bg-white/10"
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  alert('Link copied to clipboard!');
+                }}
+              >
+                <LinkIcon className="w-4 h-4 mr-2 text-green-400" />
+                Copy Link
               </Button>
             </div>
           </div>
