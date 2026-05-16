@@ -65,29 +65,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Tier sold out' }, { status: 400 });
     }
 
-    // ===== x402 Payment Protocol (V2) =====
+    // ===== Simplified Purchase Flow =====
+    // We no longer require the 402 challenge step. 
+    // The client sends the txId directly in the first request.
     const paymentSignature = req.headers.get(X402_HEADERS.PAYMENT_SIGNATURE);
 
     if (!paymentSignature) {
-      // ── STEP 1: Return HTTP 402 Payment Required ──
-      // This is exactly what x402-stacks' paymentMiddleware does when
-      // no payment-signature header is present.
-      const paymentRequired = buildPaymentRequired({
-        amount: tierData.price,
-        payTo: event.organizerAddress,
-        network: 'testnet',
-        description: `${event.title} - ${tier.toUpperCase()} ticket (${formatSTX(tierData.price)})`,
-        resource: `partystacker://event/${eventId}/ticket/${tier}`,
-      });
-
-      const paymentRequiredHeader = encodePaymentHeader(paymentRequired);
-
-      return NextResponse.json(paymentRequired, {
-        status: 402,
-        headers: {
-          [X402_HEADERS.PAYMENT_REQUIRED]: paymentRequiredHeader,
-        },
-      });
+      return NextResponse.json(
+        { error: 'Missing payment proof (x402 signature)' },
+        { status: 400 }
+      );
     }
 
     // ── STEP 2: Verify payment and create ticket ──
