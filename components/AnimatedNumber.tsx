@@ -1,21 +1,15 @@
-'use client';
+import React, { useEffect, useState } from 'react';
 
-import { motion, useSpring, useTransform } from 'framer-motion';
-import { useEffect } from 'react';
-
-export function AnimatedNumber({ value }: { value: number }) {
-  const springValue = useSpring(0, {
-    stiffness: 100,
-    damping: 30,
-  });
-
-  const displayValue = useTransform(springValue, (current) => 
-    Math.floor(current).toLocaleString()
-  );
-
+export function AnimatedNumber({ value, duration = 1000 }: { value: number; duration?: number }) {
+  const [current, setCurrent] = useState(0);
   useEffect(() => {
-    springValue.set(value);
-  }, [value, springValue]);
-
-  return <motion.span>{displayValue}</motion.span>;
+    let start = 0;
+    const increment = value / (duration / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= value) { clearInterval(timer); setCurrent(value); } else setCurrent(Math.floor(start));
+    }, 16);
+    return () => clearInterval(timer);
+  }, [value, duration]);
+  return <span>{current.toLocaleString()}</span>;
 }
