@@ -381,6 +381,7 @@ export default function EventPage() {
               >
                 <CalendarPlus className="w-4 h-4 mr-2 text-orange-400" />
                 Add to Calendar
+              </Button>
               <Button 
                 variant="outline" 
                 size="sm" 
