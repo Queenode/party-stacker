@@ -39,15 +39,15 @@ export default function MarketplacePage() {
     <main className="min-h-screen bg-slate-950 pt-24 pb-12 px-4 relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 pointer-events-none fixed">
-        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[100px]" />
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-orange-600/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-yellow-600/10 rounded-full blur-[100px]" />
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10 space-y-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div className="space-y-2">
             <h1 className="text-4xl font-bold text-white flex items-center gap-3">
-              <Store className="w-10 h-10 text-purple-500" />
+              <Store className="w-10 h-10 text-orange-500" />
               Secondary Marketplace
             </h1>
             <p className="text-slate-400 text-lg max-w-2xl">
@@ -56,7 +56,7 @@ export default function MarketplacePage() {
           </div>
           <div className="flex gap-3">
             <Link href="/my-tickets">
-              <Button variant="outline" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10">
+              <Button variant="outline" className="border-orange-500/50 text-orange-400 hover:bg-orange-500/10">
                 List My Tickets
               </Button>
             </Link>
@@ -65,7 +65,7 @@ export default function MarketplacePage() {
 
         {loading ? (
           <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
           </div>
         ) : listings.length === 0 ? (
           <Card className="bg-slate-900/50 border-white/5 text-center py-20">
@@ -78,9 +78,9 @@ export default function MarketplacePage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {listings.map((listing) => (
-              <Card key={listing.ticketId} className="shiny-card bg-slate-900/80 border-white/10 hover:border-purple-500/50 transition-all group overflow-hidden">
+              <Card key={listing.ticketId} className="shiny-card bg-slate-900/80 border-white/10 hover:border-orange-500/50 transition-all group overflow-hidden">
                 <CardHeader className="pb-4 relative">
-                  <div className="absolute top-0 right-0 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg z-10">
+                  <div className="absolute top-0 right-0 bg-orange-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg z-10">
                     ID: #{listing.ticketId}
                   </div>
                   <div className="flex justify-between items-start">
@@ -88,7 +88,7 @@ export default function MarketplacePage() {
                       <div className="flex items-center gap-2">
                         {listing.tier === 'vip' && <Sparkles className="w-4 h-4 text-yellow-500" />}
                         {listing.tier === 'backstage' && <Zap className="w-4 h-4 text-orange-500" />}
-                        <span className="text-xs font-medium uppercase tracking-wider text-purple-400">
+                        <span className="text-xs font-medium uppercase tracking-wider text-orange-400">
                           {listing.tier} Tier
                         </span>
                       </div>
@@ -113,7 +113,7 @@ export default function MarketplacePage() {
                   </div>
 
                   <Button 
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-500/20 group-hover:scale-[1.02] transition-transform"
+                    className="w-full bg-orange-600 hover:bg-orange-700 text-white shadow-lg shadow-orange-500/20 group-hover:scale-[1.02] transition-transform"
                     disabled={!isConnected}
                     onClick={() => {
                         // In a real app, call buy-listed-ticket contract function
