@@ -119,40 +119,16 @@ export async function fetchEventFromChain(id: number): Promise<Event | null> {
 
 export async function getAllEventsFromChain(): Promise<Event[]> {
   try {
-    // 1. Get last-event-id
-    const countResult = await callReadOnlyFunction({
-        network: NETWORK,
-        contractAddress: CONTRACT_ADDRESS,
-        contractName: CONTRACT_NAME,
-        functionName: 'get-last-event-id',
-        functionArgs: [],
-        senderAddress: CONTRACT_ADDRESS,
-    });
-    
-    // result is (ok uint)
-    // cvToJSON -> { type: 'response', value: { type: 'uint', value: '5' } }?
-    // Or just { type: 'uint', value: '5' } if unwrapped?
-    // Clarity function returns (response uint).
-    // So usually cvToJSON(result).value.value
-    
-    const json = cvToJSON(countResult);
-    // Debugging shape might be needed, but assuming standard ok/uint
-    const countStr = json.value?.value || json.value; // handle (ok u5) vs u5
-    const count = Number(countStr);
-    
-    if (!count || count === 0) return [];
-
     const events: Event[] = [];
-    // Loop backwards to show newest first? Or forwards?
-    // Let's fetch in parallel
-    const promises = [];
-    for (let i = 1; i <= count; i++) {
-        promises.push(fetchEventFromChain(i));
+    let i = 1;
+    // Cap at 100 to prevent infinite loops, break when fetch returns null
+    while (i <= 100) {
+      const event = await fetchEventFromChain(i);
+      if (!event) break;
+      events.push(event);
+      i++;
     }
-    
-    const results = await Promise.all(promises);
-    return results.filter((e): e is Event => e !== null);
-
+    return events;
   } catch (error) {
     console.error('Error fetching events from chain:', error);
     return [];
