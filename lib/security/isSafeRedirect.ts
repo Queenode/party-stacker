@@ -1,0 +1,1 @@
+export const isSafeRedirect = (url: string, allowedDomain: string): boolean => { try { const parsed = new URL(url, 'https://' + allowedDomain); return parsed.hostname === allowedDomain; } catch { return false; } };
