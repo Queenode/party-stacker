@@ -1,0 +1,1 @@
+export const formatDuration = (ms: number) => { const s = Math.floor((ms / 1000) % 60); const m = Math.floor((ms / 1000 / 60) % 60); const h = Math.floor((ms / 1000 / 60 / 60) % 24); return `${h}h ${m}m ${s}s`; };
