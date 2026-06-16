@@ -1,0 +1,1 @@
+export const reject = (arr, fn) => arr.filter(x => !fn(x));
