@@ -1,0 +1,1 @@
+export const map = (arr, fn) => arr.map(fn);
