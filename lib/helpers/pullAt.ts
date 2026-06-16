@@ -1,0 +1,1 @@
+export const pullAt = (arr, indexes) => arr.filter((_, i) => !indexes.includes(i));
