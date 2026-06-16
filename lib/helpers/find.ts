@@ -1,0 +1,1 @@
+export const find = (arr, fn) => arr.find(fn);
