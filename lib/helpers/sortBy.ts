@@ -1,0 +1,1 @@
+export const sortBy = (arr, fn) => [...arr].sort((a, b) => fn(a) > fn(b) ? 1 : -1);
