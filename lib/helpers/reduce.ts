@@ -1,0 +1,1 @@
+export const reduce = (arr, fn, acc) => arr.reduce(fn, acc);
