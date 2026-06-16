@@ -1,0 +1,1 @@
+export const keyBy = (arr, fn) => arr.reduce((acc, x) => { acc[fn(x)] = x; return acc; }, {});
