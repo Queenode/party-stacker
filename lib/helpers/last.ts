@@ -1,0 +1,1 @@
+export const last = (arr) => arr && arr.length ? arr[arr.length - 1] : undefined;
