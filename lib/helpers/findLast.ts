@@ -1,0 +1,1 @@
+export const findLast = (arr, fn) => [...arr].reverse().find(fn);
