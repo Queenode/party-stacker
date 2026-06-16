@@ -1,0 +1,1 @@
+export const partition = (arr, fn) => arr.reduce((acc, x) => { acc[fn(x) ? 0 : 1].push(x); return acc; }, [[], []]);
