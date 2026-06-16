@@ -1,0 +1,1 @@
+export const flattenDeep = (arr) => arr.flat(Infinity);
