@@ -1,0 +1,1 @@
+export const intersection = (a, b) => a.filter(x => b.includes(x));
