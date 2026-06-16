@@ -1,0 +1,1 @@
+export const forEachRight = (arr, fn) => [...arr].reverse().forEach(fn);
