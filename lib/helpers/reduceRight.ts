@@ -1,0 +1,1 @@
+export const reduceRight = (arr, fn, acc) => arr.reduceRight(fn, acc);
