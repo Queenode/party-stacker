@@ -1,0 +1,1 @@
+export const unzip = (arr) => arr[0].map((_, i) => arr.map(x => x[i]));
