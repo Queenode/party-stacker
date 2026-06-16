@@ -1,0 +1,1 @@
+export const flatMap = (arr, fn) => arr.map(fn).flat();
