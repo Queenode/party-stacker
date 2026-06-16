@@ -1,0 +1,1 @@
+export const join = (arr, sep = ",") => arr.join(sep);
