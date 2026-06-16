@@ -1,0 +1,1 @@
+export const size = (col) => Object.keys(col).length;
