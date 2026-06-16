@@ -1,0 +1,1 @@
+export const fromPairs = (pairs) => Object.fromEntries(pairs);
