@@ -1,0 +1,1 @@
+export const nth = (arr, n = 0) => n >= 0 ? arr[n] : arr[arr.length + n];
