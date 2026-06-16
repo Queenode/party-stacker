@@ -1,0 +1,1 @@
+export const indexOf = (arr, val, from = 0) => arr.indexOf(val, from);
