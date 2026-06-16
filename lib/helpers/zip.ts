@@ -1,0 +1,1 @@
+export const zip = (...arrs) => arrs[0].map((_, i) => arrs.map(arr => arr[i]));
