@@ -1,0 +1,1 @@
+export const countBy = (arr, fn) => arr.reduce((acc, x) => { const key = fn(x); acc[key] = (acc[key] || 0) + 1; return acc; }, {});
