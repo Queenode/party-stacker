@@ -1,0 +1,1 @@
+export const forEach = (arr, fn) => arr.forEach(fn);
