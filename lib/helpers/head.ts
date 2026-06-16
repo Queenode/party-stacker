@@ -1,0 +1,1 @@
+export const head = (arr) => arr && arr.length ? arr[0] : undefined;
