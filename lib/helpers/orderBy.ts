@@ -1,0 +1,1 @@
+export const orderBy = (arr, fn, ord) => [...arr].sort((a, b) => (fn(a) > fn(b) ? 1 : -1) * (ord === "desc" ? -1 : 1));
