@@ -1,0 +1,1 @@
+export const zipObject = (props, values) => props.reduce((obj, prop, i) => { obj[prop] = values[i]; return obj; }, {});
