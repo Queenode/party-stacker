@@ -1,0 +1,1 @@
+export const groupBy = (arr, fn) => arr.reduce((acc, x) => { const key = fn(x); (acc[key] = acc[key] || []).push(x); return acc; }, {});
