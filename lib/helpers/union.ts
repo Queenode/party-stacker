@@ -1,0 +1,1 @@
+export const union = (...arrs) => [...new Set([].concat(...arrs))];
