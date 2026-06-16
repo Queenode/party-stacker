@@ -1,0 +1,1 @@
+export const pullAll = (arr, values) => arr.filter(x => !values.includes(x));
