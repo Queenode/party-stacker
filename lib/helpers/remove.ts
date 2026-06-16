@@ -1,0 +1,1 @@
+export const remove = (arr, fn) => arr.filter(x => !fn(x));
