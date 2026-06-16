@@ -1,0 +1,1 @@
+export const invokeMap = (arr, path, ...args) => arr.map(x => x[path](...args));
