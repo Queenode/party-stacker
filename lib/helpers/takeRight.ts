@@ -1,0 +1,1 @@
+export const takeRight = (arr, n = 1) => arr.slice(-n);
