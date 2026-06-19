@@ -1,0 +1,1 @@
+import { apiClient } from './apiClient';\n\nexport const sendMessage = async (payload: any = {}) => {\n  try {\n    const response = await apiClient.request({\n      method: 'POST',\n      url: '/api/v1/sendmessage',\n      data: payload\n    });\n    return response.data;\n  } catch (error) {\n    console.error('Error executing sendMessage:', error);\n    throw error;\n  }\n};\n
