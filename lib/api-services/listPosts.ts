@@ -1,0 +1,1 @@
+import { apiClient } from './apiClient';\n\nexport const listPosts = async (payload: any = {}) => {\n  try {\n    const response = await apiClient.request({\n      method: 'GET',\n      url: '/api/v1/listposts',\n      data: payload\n    });\n    return response.data;\n  } catch (error) {\n    console.error('Error executing listPosts:', error);\n    throw error;\n  }\n};\n
