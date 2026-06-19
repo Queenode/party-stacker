@@ -1,0 +1,1 @@
+import { apiClient } from './apiClient';\n\nexport const updateEvent = async (payload: any = {}) => {\n  try {\n    const response = await apiClient.request({\n      method: 'POST',\n      url: '/api/v1/updateevent',\n      data: payload\n    });\n    return response.data;\n  } catch (error) {\n    console.error('Error executing updateEvent:', error);\n    throw error;\n  }\n};\n
