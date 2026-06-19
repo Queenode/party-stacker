@@ -1,0 +1,1 @@
+import { apiClient } from './apiClient';\n\nexport const removeLike = async (payload: any = {}) => {\n  try {\n    const response = await apiClient.request({\n      method: 'POST',\n      url: '/api/v1/removelike',\n      data: payload\n    });\n    return response.data;\n  } catch (error) {\n    console.error('Error executing removeLike:', error);\n    throw error;\n  }\n};\n
