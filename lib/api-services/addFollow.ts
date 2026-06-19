@@ -1,0 +1,1 @@
+import { apiClient } from './apiClient';\n\nexport const addFollow = async (payload: any = {}) => {\n  try {\n    const response = await apiClient.request({\n      method: 'POST',\n      url: '/api/v1/addfollow',\n      data: payload\n    });\n    return response.data;\n  } catch (error) {\n    console.error('Error executing addFollow:', error);\n    throw error;\n  }\n};\n
