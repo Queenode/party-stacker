@@ -1,0 +1,1 @@
+export const calculateWACC = (equity: number, debt: number, costOfEquity: number, costOfDebt: number, taxRate: number): number => { const v = equity + debt; return (equity / v * costOfEquity) + (debt / v * costOfDebt * (1 - taxRate)); };
